@@ -17,6 +17,7 @@ const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     folding: params.folding !== 'false',
     readOnly: params.readonly === 'true',
     lineNumbers: params.lineNumbers as any ?? 'on',
+    automaticLayout: true,
     minimap: {
         enabled: params.minimap !== 'false',
     },
