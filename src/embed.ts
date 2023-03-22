@@ -110,3 +110,7 @@ receive('change-typescript-defaults', e => {
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions(e.diagnosticsOptions);
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions(e.compilerOptions);
 });
+
+send({
+    type: 'ready',
+});

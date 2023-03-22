@@ -60,6 +60,7 @@ iframe.addEventListener('message', (e) => {
 
 Messages sent by the iframe:
 
+- `{ type: "ready" }`: Sent when the editor is ready
 - `{ type: "change", value: string }`: Sent everytime the editor value changes
 - `{ type: "content", value: string }`: Sent when the editor content is requested via `get-content` message
 
