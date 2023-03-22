@@ -54,7 +54,7 @@ Receive messages via
 
 ```javascript
 iframe.addEventListener('message', (e) => {
-    console.log(`message type is ${e.type}`);
+    console.log(`message type is ${e.data.type}, payload is in`, e.data);
 });
 ```
 
