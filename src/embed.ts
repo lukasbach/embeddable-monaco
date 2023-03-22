@@ -35,6 +35,7 @@ const changeBackground = (color: string, theme?: string) => {
         colors: {
             "editor.background": fixedColor,
             "editor.gutter.background": fixedColor,
+            "minimap.background": fixedColor,
         },
     });
     monaco.editor.setTheme("custom");
