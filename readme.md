@@ -14,6 +14,32 @@ This project provides a pre-built version of Monaco Editor that can be embedded 
 a simple messaging API. It is a drop-in replacement for the Monaco Editor, but it can be used in environments
 where the build system is not available or where web workers are not allowed.
 
+## Example
+
+```html
+<iframe src="https://embeddable-monaco.lukasbach.com?code=initial_code&language=javascript&theme=vs-dark" id="iframe"></iframe>
+```
+
+```javascript
+const iframe = document.getElementById("iframe");
+window.addEventListener("message", ({ data }) => {
+    switch(data.type) {
+        case "ready": {
+            iframe.contentWindow?.postMessage({
+                type: "change-value",
+                value: "new initial value"
+            }, "*");
+            break;
+        }
+        case "change": {
+            console.log("current value is", data.value)
+            break;
+        }
+    }
+});
+```
+
+
 ## Usage
 
 To use, just embed the URL https://embeddable-monaco.lukasbach.com in an iframe.
