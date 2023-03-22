@@ -27,8 +27,7 @@ console.log("options are", options);
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
 const changeBackground = (color: string, theme?: string) => {
-    const fixedColor = color.startsWith("#") || color === "transparent"
-        ? color : "#" + color
+    const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color
     monaco.editor.defineTheme("custom", {
         base: theme ?? params.theme ?? 'vs-light',
         inherit: true,
