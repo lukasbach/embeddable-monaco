@@ -26,16 +26,23 @@ console.log("options are", options);
 
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
-if (params.background) {
+const changeBackground = (color: string, theme?: string) => {
+    const fixedColor = color.startsWith("#") || color === "transparent"
+        ? color : "#" + color
     monaco.editor.defineTheme("custom", {
-        base: "vs",
+        base: theme ?? params.theme ?? 'vs-light',
         inherit: true,
         rules: [],
         colors: {
-            "editor.background": "#" + params.background,
+            "editor.background": fixedColor,
+            "editor.gutter.background": fixedColor,
         },
     });
     monaco.editor.setTheme("custom");
+}
+
+if (params.background) {
+    changeBackground(params.background);
 }
 
 if (params.javascriptDefaults) {
@@ -83,15 +90,7 @@ receive('change-language', e => {
 });
 
 receive('change-background', e => {
-    monaco.editor.defineTheme("custom", {
-        base: "vs",
-        inherit: true,
-        rules: [],
-        colors: {
-            "editor.background": e.background,
-        },
-    });
-    monaco.editor.setTheme("custom");
+    changeBackground(e.background, e.theme);
 });
 
 receive('get-content', () => {

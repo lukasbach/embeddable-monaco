@@ -37,7 +37,7 @@ The following query parameters are supported:
 - `readonly`: boolean, "true" or "false"
 - `lineNumbers`: boolean, "on" or "off"
 - `minimap`: boolean, "true" or "false"
-- `background`: custom background color
+- `background`: custom background color, can also be transparent
 - `javascriptDefaults`: set javascript language properties, required to use:
   - `javascriptDefaultsNoSemanticValidation`
   - `javascriptDefaultsNoSyntaxValidation`
@@ -78,7 +78,7 @@ Messages that can be sent to the iframe
 - `{ type: "change-value", value: string }`: Change editor value
 - `{ type: "change-language", language: string }`: Change editor language
 - `{ type: "change-theme", theme: string }`: Change editor theme
-- `{ type: "change-background", background: string }`: Change editor background color
+- `{ type: "change-background", background: string, theme?: string }`: Change editor background color. Can also be transparent
 - `{ type: "change-javascript-defaults", javascriptDefaults: IJavaScriptDefaults }`: Change javascript language defaults
 - `{ type: "change-typescript-defaults", typescriptDefaults: ITypeScriptDefaults }`: Change typescript language defaults
 - `{ type: "get-content }`: IFrame will dispatch a `content` message with the current editor value
