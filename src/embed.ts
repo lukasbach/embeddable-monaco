@@ -51,18 +51,12 @@ if (params.javascriptDefaults) {
         noSemanticValidation: params.javascriptDefaultsNoSemanticValidation === 'true',
         noSyntaxValidation: params.javascriptDefaultsNoSyntaxValidation === 'true',
     });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-        target: monaco.languages.typescript.ScriptTarget.ES2015,
-    });
 }
 
 if (params.typescriptDefaults) {
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: params.typescriptDefaultsNoSemanticValidation === 'true',
         noSyntaxValidation: params.typescriptDefaultsNoSyntaxValidation === 'true',
-    });
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-        target: monaco.languages.typescript.ScriptTarget.ES2015,
     });
 }
 
