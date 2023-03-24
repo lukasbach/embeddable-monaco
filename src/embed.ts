@@ -1,13 +1,14 @@
 import * as monaco from 'monaco-editor';
 
-const send = (obj: any) => window.top?.postMessage(obj, '*');
-const receive = (type: string, cb: (e: any) => void) =>
-    window.addEventListener('message', (e) =>
-        e.data.type === type && cb(e.data));
 
 const params = new Proxy<any>(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(String(prop)),
 });
+
+const send = (obj: any) => window.top?.postMessage({ ...obj, context: params.context }, '*');
+const receive = (type: string, cb: (e: any) => void) =>
+    window.addEventListener('message', (e) =>
+        e.data.type === type && cb(e.data));
 
 const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     value: params.code ?? '',

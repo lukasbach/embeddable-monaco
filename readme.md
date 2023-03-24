@@ -71,10 +71,11 @@ The following query parameters are supported:
   - `typescriptDefaultsNoSemanticValidation`
   - `typescriptDefaultsNoSyntaxValidation`
 - `dontPostValueOnChange`: In the `change` handler, don't post the value back to the parent frame every time the model is changed
+- `context`: a string that is passed back in every message sent back from the iframe
 
 ## Messaging API
 
-### Sent messages
+### Messages sent by the iframe to the parent
 
 Receive messages via
 
@@ -90,7 +91,7 @@ Messages sent by the iframe:
 - `{ type: "change", value: string }`: Sent everytime the editor value changes
 - `{ type: "content", value: string }`: Sent when the editor content is requested via `get-content` message
 
-### Receiving messages
+### Messages that can be sent to the iframe from the parent
 
 Send messages to the iframe via
 
