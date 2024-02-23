@@ -58,6 +58,8 @@ The following query parameters are supported:
 - `code`: Initial code, defaults to empty
 - `lang`: Initial language, defaults to javascript
 - `theme`: Initial theme, defaults to vs-light
+  - Also supports all of these themes: https://github.com/brijeshb42/monaco-themes/blob/master/themes/themelist.json
+  - Use the value of the theme as name, e.g. "Vibrant Ink"
 - `contextmenu`: boolean, "true" or "false"
 - `folding`: boolean, "true" or "false"
 - `readonly`: boolean, "true" or "false"

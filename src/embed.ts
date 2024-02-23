@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor';
-
+// @ts-ignore
+import { parseTmTheme } from "monaco-themes";
 
 const params = new Proxy<any>(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(String(prop)),
@@ -27,6 +28,14 @@ const options: monaco.editor.IStandaloneEditorConstructionOptions = {
 console.log("options are", options);
 
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
+
+const customTheme = params.theme && !["vs-light", "vs-dark"].includes(params.theme) ? params.theme : undefined;
+if (customTheme) {
+    fetch("/themes/" + customTheme + ".json").then(res => res.json()).then(theme => {
+        monaco.editor.defineTheme('custom', theme);
+        monaco.editor.setTheme('custom');
+    });
+}
 
 const changeBackground = (color: string, theme?: string) => {
     const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color
