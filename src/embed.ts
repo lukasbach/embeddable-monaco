@@ -29,23 +29,34 @@ console.log("options are", options);
 
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
-const customTheme = params.theme && !["vs-light", "vs-dark"].includes(params.theme) ? params.theme : undefined;
-const loadTheme = async (): Promise<monaco.editor.IStandaloneThemeData> => {
-    return customTheme ? fetch("/themes/" + customTheme + ".json").then(res => res.json()) : Promise.resolve(undefined);
+// const customTheme = params.theme && !["vs-light", "vs-dark"].includes(params.theme) ? params.theme : undefined;
+
+const getCustomThemeName = (theme: string | undefined) => {
+    return theme && !["vs-light", "vs-dark"].includes(params.theme) ? theme : undefined
+}
+const getBuiltinTheme = (theme: string | undefined) => {
+    return theme && ["vs-light", "vs-dark"].includes(params.theme) ? theme : undefined
 }
 
-loadTheme().then(theme => {
-    if (theme) {
-        monaco.editor.defineTheme("custom", theme);
-        monaco.editor.setTheme("custom");
-    }
-});
+const loadTheme = async (themeName: string | undefined): Promise<monaco.editor.IStandaloneThemeData> => {
+    return themeName ? fetch("/themes/" + themeName + ".json").then(res => res.json()) : Promise.resolve(undefined);
+}
+
+const customTheme = getCustomThemeName(params.theme);
+if (customTheme) {
+    loadTheme(customTheme).then(theme => {
+        if (theme) {
+            monaco.editor.defineTheme("custom", theme);
+            monaco.editor.setTheme("custom");
+        }
+    });
+}
 
 const changeBackground = async (color: string, theme?: string) => {
     const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color;
-    const customTheme = await loadTheme();
+    const customTheme = await loadTheme(getCustomThemeName(theme));
     monaco.editor.defineTheme("custom", {
-        base: theme ?? (customTheme ? undefined : params.theme) ?? customTheme?.base ?? 'vs-light',
+        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs-light' as any,
         inherit: customTheme?.inherit ?? true,
         rules: customTheme?.rules ?? [],
         colors: {
@@ -60,7 +71,7 @@ const changeBackground = async (color: string, theme?: string) => {
 }
 
 if (params.background) {
-    changeBackground(params.background);
+    changeBackground(params.background, params.theme);
 }
 
 if (params.javascriptDefaults) {
