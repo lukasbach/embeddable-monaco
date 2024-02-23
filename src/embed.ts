@@ -14,7 +14,7 @@ const receive = (type: string, cb: (e: any) => void) =>
 const options: monaco.editor.IStandaloneEditorConstructionOptions = {
     value: params.code ?? '',
     language: params.lang ?? 'javascript',
-    theme: params.theme ?? 'vs-light',
+    theme: params.theme ?? 'vs',
     contextmenu: params.contextmenu !== 'false',
     folding: params.folding !== 'false',
     readOnly: params.readonly === 'true',
@@ -26,16 +26,15 @@ const options: monaco.editor.IStandaloneEditorConstructionOptions = {
 };
 
 console.log("options are", options);
+const builtinThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light'];
 
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
-// const customTheme = params.theme && !["vs-light", "vs-dark"].includes(params.theme) ? params.theme : undefined;
-
 const getCustomThemeName = (theme: string | undefined) => {
-    return theme && !["vs-light", "vs-dark"].includes(params.theme) ? theme : undefined
+    return theme && !builtinThemes.includes(params.theme) ? theme : undefined
 }
 const getBuiltinTheme = (theme: string | undefined) => {
-    return theme && ["vs-light", "vs-dark"].includes(params.theme) ? theme : undefined
+    return theme && builtinThemes.includes(params.theme) ? theme : undefined
 }
 
 const loadTheme = async (themeName: string | undefined): Promise<monaco.editor.IStandaloneThemeData> => {
@@ -57,7 +56,7 @@ const changeBackground = async (color: string, theme?: string) => {
     const customTheme = await loadTheme(getCustomThemeName(theme));
 
     console.log("Using custom theme", {
-        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs-light' as any,
+        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs' as any,
         inherit: customTheme?.inherit ?? true,
         rules: customTheme?.rules ?? [],
         colors: {
@@ -69,8 +68,8 @@ const changeBackground = async (color: string, theme?: string) => {
         encodedTokensColors: customTheme?.encodedTokensColors,
     })
 
-    monaco.editor.defineTheme("custom", {
-        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs-light' as any,
+    monaco.editor.defineTheme("custombg", {
+        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs' as any,
         inherit: customTheme?.inherit ?? true,
         rules: customTheme?.rules ?? [],
         colors: {
@@ -81,7 +80,7 @@ const changeBackground = async (color: string, theme?: string) => {
         },
         encodedTokensColors: customTheme?.encodedTokensColors,
     });
-    monaco.editor.setTheme("custom");
+    monaco.editor.setTheme("custombg");
 }
 
 if (params.background) {
