@@ -55,6 +55,20 @@ if (customTheme) {
 const changeBackground = async (color: string, theme?: string) => {
     const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color;
     const customTheme = await loadTheme(getCustomThemeName(theme));
+
+    console.log("Using custom theme", {
+        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs-light' as any,
+        inherit: customTheme?.inherit ?? true,
+        rules: customTheme?.rules ?? [],
+        colors: {
+            ...customTheme?.colors,
+            "editor.background": fixedColor,
+            "editor.gutter.background": fixedColor,
+            "minimap.background": fixedColor,
+        },
+        encodedTokensColors: customTheme?.encodedTokensColors,
+    })
+
     monaco.editor.defineTheme("custom", {
         base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs-light' as any,
         inherit: customTheme?.inherit ?? true,
