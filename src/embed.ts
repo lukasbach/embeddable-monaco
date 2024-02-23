@@ -30,24 +30,31 @@ console.log("options are", options);
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
 const customTheme = params.theme && !["vs-light", "vs-dark"].includes(params.theme) ? params.theme : undefined;
-if (customTheme) {
-    fetch("/themes/" + customTheme + ".json").then(res => res.json()).then(theme => {
-        monaco.editor.defineTheme('custom', theme);
-        monaco.editor.setTheme('custom');
-    });
+const loadTheme = async (): Promise<monaco.editor.IStandaloneThemeData> => {
+    return customTheme ? fetch("/themes/" + customTheme + ".json").then(res => res.json()) : Promise.resolve(undefined);
 }
 
-const changeBackground = (color: string, theme?: string) => {
-    const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color
+loadTheme().then(theme => {
+    if (theme) {
+        monaco.editor.defineTheme("custom", theme);
+        monaco.editor.setTheme("custom");
+    }
+});
+
+const changeBackground = async (color: string, theme?: string) => {
+    const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color;
+    const customTheme = await loadTheme();
     monaco.editor.defineTheme("custom", {
-        base: theme ?? params.theme ?? 'vs-light',
-        inherit: true,
-        rules: [],
+        base: theme ?? (customTheme ? undefined : params.theme) ?? customTheme?.base ?? 'vs-light',
+        inherit: customTheme?.inherit ?? true,
+        rules: customTheme?.rules ?? [],
         colors: {
+            ...customTheme?.colors,
             "editor.background": fixedColor,
             "editor.gutter.background": fixedColor,
             "minimap.background": fixedColor,
         },
+        encodedTokensColors: customTheme?.encodedTokensColors,
     });
     monaco.editor.setTheme("custom");
 }
