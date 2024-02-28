@@ -31,10 +31,10 @@ const builtinThemes = ['vs', 'vs-dark', 'hc-black', 'hc-light'];
 const editor = monaco.editor.create(document.getElementById('root') ?? document.body, options);
 
 const getCustomThemeName = (theme: string | undefined) => {
-    return theme && !builtinThemes.includes(params.theme) ? theme : undefined
+    return theme && !builtinThemes.includes(theme) ? theme : undefined
 }
 const getBuiltinTheme = (theme: string | undefined) => {
-    return theme && builtinThemes.includes(params.theme) ? theme : undefined
+    return theme && builtinThemes.includes(theme) ? theme : undefined
 }
 
 const loadTheme = async (themeName: string | undefined): Promise<monaco.editor.IStandaloneThemeData> => {
@@ -55,8 +55,8 @@ const changeBackground = async (color: string, theme?: string) => {
     const fixedColor = color.startsWith("#") ? color : color === "transparent" ? "#00000000" : "#" + color;
     const customTheme = await loadTheme(getCustomThemeName(theme));
 
-    monaco.editor.defineTheme("custombg", {
-        base: getBuiltinTheme(theme ?? customTheme.base) ?? 'vs' as any,
+    const custombgTheme = {
+        base: getBuiltinTheme(theme) ?? getBuiltinTheme(customTheme.base) ?? 'vs' as any,
         inherit: customTheme?.inherit ?? true,
         rules: customTheme?.rules ?? [],
         colors: {
@@ -66,7 +66,9 @@ const changeBackground = async (color: string, theme?: string) => {
             "minimap.background": fixedColor,
         },
         encodedTokensColors: customTheme?.encodedTokensColors,
-    });
+    };
+
+    monaco.editor.defineTheme("custombg", custombgTheme);
     monaco.editor.setTheme("custombg");
 }
 
